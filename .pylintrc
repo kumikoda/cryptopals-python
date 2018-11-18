@@ -60,7 +60,8 @@ disable=
     missing-docstring,
     protected-access,
     too-few-public-methods,
-
+    w0702,
+    c0301
 
 [REPORTS]
 

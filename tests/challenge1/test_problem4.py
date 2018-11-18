@@ -1,5 +1,5 @@
 from os import path
-from single_byte_xor import single_byte_xor, score_frequency
+from test_problem3 import single_byte_xor, score_frequency
 
 
 def find_encrypted(hex_strs):
@@ -18,7 +18,7 @@ def find_encrypted(hex_strs):
     return best_string
 
 
-def test_4():
+def test():
     basepath = path.dirname(__file__)
     data_file = path.join(basepath, "problem4.data")
     with open(data_file) as f:
