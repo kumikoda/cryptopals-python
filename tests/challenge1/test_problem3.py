@@ -1,12 +1,11 @@
-def single_byte_xor(hex_str, byte):
-    hex_bytes = bytes.fromhex(hex_str)
+def single_byte_xor(bytes_in, byte):
     bytes_out = []
-    for i in range(0, len(hex_bytes)):
-        bytes_out.append(hex_bytes[i] ^ byte)
-    return bytes(bytes_out).decode("utf-8")
+    for i in range(0, len(bytes_in)):
+        bytes_out.append(bytes_in[i] ^ byte)
+    return bytes(bytes_out)
 
 
-def get_letter_counts(string):
+def get_letter_counts(s):
     counts = {
         'a': 0,
         'b': 0,
@@ -34,9 +33,9 @@ def get_letter_counts(string):
         'x': 0,
         'y': 0,
         'z': 0,
-        ' ': 0
+        ' ': 0,
     }
-    for c in string.lower():
+    for c in s:
         if c in counts:
             counts[c] += 1
     return counts
@@ -50,37 +49,51 @@ def get_frequency_order(letter_counts):
 
 def matches(str1, str2):
     count = 0
-    max_pos = 0
     for c in str1:
-        pos = str2.find(c)
-        if pos >= max_pos:
-            max_pos = pos
+        if c in str2:
             count += 1
     return count
 
 
-def score_frequency(string):
+def special_penalty(str):
+    str = str.lower()
+    english_chars = " etaoinshrdlcumwfgypbvkjxqz"
+    special_chars = []
+    for c in str:
+        if c not in english_chars:
+            if c not in special_chars:
+                special_chars.append(c)
+    return len(special_chars)
+
+
+def score_frequency(str):
+    str = str.lower()
     standard_frequency_order = " etaoinshrdlcumwfgypbvkjxqz"
-    letter_counts = get_letter_counts(string)
+    letter_counts = get_letter_counts(str)
     frequency_order = get_frequency_order(letter_counts)
-    top_matches = matches(standard_frequency_order[:6], frequency_order[:6])
+    top_matches = matches(standard_frequency_order[:7], frequency_order[:7])
     bot_matches = matches(standard_frequency_order[-6:], frequency_order[-6:])
-    return top_matches + bot_matches
+    score = top_matches + bot_matches
+    return score
 
 
-def break_cipher(hex_str):
-    max_score = 0
-    best_string = None
-    for x in range(0, 127):
-        xored = single_byte_xor(hex_str, x)
-        score = score_frequency(xored)
-        if score > max_score:
-            max_score = score
-            best_string = xored
-    return best_string
+def break_single_xor_cipher(hex_str):
+    candidates = []
+    for b in range(0, 127):
+        xored = single_byte_xor(hex_str, b)
+        xored_string = xored.decode("utf-8")
+        f_score = score_frequency(xored_string)
+        penalty = special_penalty(xored_string)
+        score = f_score - 1.5 * penalty
+        candidates.append((score, xored_string, chr(b)))
+
+    sorted_candidates = sorted(candidates, key=lambda x: x[0], reverse=True)
+    best_score, best_string, best_key = sorted_candidates[0]
+    return best_key, best_string
 
 
-def test():
-    h = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-    best_string = break_cipher(h)
+def test_problem3():
+    hex_string = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+    bs = bytes.fromhex(hex_string)
+    key, best_string = break_single_xor_cipher(bs)
     assert best_string == "Cooking MC's like a pound of bacon"
