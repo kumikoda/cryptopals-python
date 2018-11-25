@@ -16,4 +16,7 @@ https://cryptopals.com/
 
 ## Run tests
 
-- `pytest`
+- `pip3 install -e .` to install the crypto package itself for tests
+- `pytest` to run all tests
+- `pytest -k name_of_test_file` to run all tests in a file
+- `pytest -k name_of test` to run a single test
