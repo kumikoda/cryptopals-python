@@ -22,12 +22,12 @@ def test_break_repeating_key_xor():
 
 def test_s1c6():
     basepath = path.dirname(__file__)
-    data_file = path.join(basepath, "problem6.data")
+    data_file = path.join(basepath, "challenge6.data")
     with open(data_file) as f:
         data = base64.b64decode(f.read())
     score, key, answer = break_repeating_key_xor(data)
 
-    answer_file = path.join(basepath, "problem6.expected_output")
+    answer_file = path.join(basepath, "challenge6.expected_output")
     with open(answer_file) as f:
         expected_answer = f.read()
     assert answer.split() == expected_answer.split()

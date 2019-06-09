@@ -17,7 +17,7 @@ def find_encrypted(hex_strs: List[str]) -> str:
 
 def test_s1c4():
     basepath = path.dirname(__file__)
-    data_file = path.join(basepath, "problem4.data")
+    data_file = path.join(basepath, "challenge4.data")
     with open(data_file) as f:
         lines = f.read().splitlines()
     best_string = find_encrypted(lines)
