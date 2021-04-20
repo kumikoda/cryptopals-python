@@ -4,7 +4,7 @@ more-itertools==4.3.0
 mypy==0.641
 mypy-extensions==0.4.1
 pluggy==0.8.0
-py==1.7.0
+py==1.10.0
 pycrypto==2.6.1
 pytest==3.10.1
 six==1.11.0
